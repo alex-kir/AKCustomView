@@ -8,21 +8,24 @@ namespace AKCustomView.Demo
     {
         public App()
         {
+
+            var content = new RelativeLayout();
+            content.Children.Add(new RoundBoxView()
+                {
+                    BorderColor = Color.Green,
+                    BorderWidth = 2,
+                    CornerRadius = 50,
+                    FillColor = Color.Yellow,
+                },
+                Constraint.RelativeToParent(p => (p.Width - 200) / 2),
+                Constraint.RelativeToParent(p => (p.Height - 300) / 2),
+                Constraint.RelativeToParent(p => 200),
+                Constraint.RelativeToParent(p => 300));
+
             // The root page of your application
             MainPage = new ContentPage
             {
-                Content = new StackLayout
-                {
-                    VerticalOptions = LayoutOptions.Center,
-                    Children =
-                    {
-                        new Label
-                        {
-                            XAlign = TextAlignment.Center,
-                            Text = "Welcome to Xamarin Forms!"
-                        }
-                    }
-                }
+                Content = content,
             };
         }
 

@@ -26,6 +26,9 @@ namespace AKCustomView.Demo.Droid
 		
 		public static void UpdateIdValues()
 		{
+			global::AK.Droid.Resource.String.ApplicationName = global::AKCustomView.Demo.Droid.Resource.String.ApplicationName;
+			global::AK.Droid.Resource.String.Hello = global::AKCustomView.Demo.Droid.Resource.String.Hello;
+			global::AK.Droid.Resource.String.library_name = global::AKCustomView.Demo.Droid.Resource.String.library_name;
 		}
 		
 		public partial class Attribute
@@ -53,6 +56,28 @@ namespace AKCustomView.Demo.Droid
 			}
 			
 			private Drawable()
+			{
+			}
+		}
+		
+		public partial class String
+		{
+			
+			// aapt resource value: 0x7f030002
+			public const int ApplicationName = 2130903042;
+			
+			// aapt resource value: 0x7f030001
+			public const int Hello = 2130903041;
+			
+			// aapt resource value: 0x7f030000
+			public const int library_name = 2130903040;
+			
+			static String()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private String()
 			{
 			}
 		}
