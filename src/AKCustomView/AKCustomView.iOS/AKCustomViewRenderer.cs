@@ -40,15 +40,20 @@ namespace AK.iOS
         [Foundation.Preserve]
         protected override void OnElementChanged(ElementChangedEventArgs<View> e)
         {
-            if (this.Control == null) {
-                SetNativeControl(new AKCustomViewInternal(this));
+            if (e.NewElement != null)
+            {
+                if (this.Control == null)
+                {
+                    SetNativeControl(new AKCustomViewInternal(this));
+                }
+
+                var control = this.Control as AKCustomViewInternal;
+                var view = e.NewElement as AKCustomView;
+                if (control != null && view != null)
+                {
+                    view._invalidate = control.SetNeedsDisplay;
+                }
             }
-
-            var control = (AKCustomViewInternal)this.Control;
-            var view = (AKCustomView)e.NewElement;
-
-            view._invalidate = control.SetNeedsDisplay;
-
             base.OnElementChanged(e);
         }
     }
