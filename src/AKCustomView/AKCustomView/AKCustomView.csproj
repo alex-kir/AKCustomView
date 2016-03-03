@@ -35,6 +35,10 @@
     <Compile Include="Graphics.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="Types.cs" />
+    <Compile Include="Touch.cs" />
+    <Compile Include="GestureRecognizer.cs" />
+    <Compile Include="Extentions.cs" />
+    <Compile Include="SingleTapGestureRecognizer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.Forms.Core, Version=1.4.0.0, Culture=neutral, PublicKeyToken=null">

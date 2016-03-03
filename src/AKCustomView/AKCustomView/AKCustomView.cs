@@ -7,11 +7,18 @@ using Xamarin.Forms;
 
 namespace AK
 {
+    public class CustomView : AKCustomView
+    {
+    }
+
     public class AKCustomView : View
     {
+        public bool UserInteractionEnabled { get; set; }
+
         public Action _invalidate;
         public AKCustomView()
         {
+            UserInteractionEnabled = false;
         }
 
         public virtual void OnDraw(Graphics g)
@@ -19,6 +26,11 @@ namespace AK
 
         }
     
+        public virtual void OnTouch(Touch[] touches)
+        {
+            
+        }
+
         public void Invalidate()
         {
             if (_invalidate != null)
