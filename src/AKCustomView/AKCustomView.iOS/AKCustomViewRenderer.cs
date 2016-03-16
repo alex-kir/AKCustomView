@@ -34,34 +34,34 @@ namespace AK.iOS
 
             public override void TouchesBegan(Foundation.NSSet touches, UIEvent evt)
             {
-                if (!ProcessTouches(touches, evt))
-                    base.TouchesBegan(touches, evt);
+                ProcessTouches(evt);
+                base.TouchesBegan(touches, evt);
             }
 
             public override void TouchesMoved(Foundation.NSSet touches, UIEvent evt)
             {
-                if (!ProcessTouches(touches, evt))
-                    base.TouchesMoved(touches, evt);
+                ProcessTouches(evt);
+                base.TouchesMoved(touches, evt);
             }
 
             public override void TouchesEnded(Foundation.NSSet touches, UIEvent evt)
             {
-                if (!ProcessTouches(touches, evt))
-                    base.TouchesEnded(touches, evt);
+                ProcessTouches(evt);
+                base.TouchesEnded(touches, evt);
             }
 
             public override void TouchesCancelled(Foundation.NSSet touches, UIEvent evt)
             {
-                if (!ProcessTouches(touches, evt))
-                    base.TouchesCancelled(touches, evt);
+                ProcessTouches(evt);
+                base.TouchesCancelled(touches, evt);
             }
 
-            bool ProcessTouches(Foundation.NSSet touches, UIEvent evt)
+            bool ProcessTouches(UIEvent evt)
             {
                 var view = (AK.AKCustomView)owner.Element;
                 if (!view.UserInteractionEnabled)
                     return false;
-                
+
                 var tt = evt.AllTouches.Cast<UITouch>().Select(it => new AK.Touch{
                     Id = it.GetHashCode(), // TODO
                     IsDown = it.Phase == UITouchPhase.Began,
