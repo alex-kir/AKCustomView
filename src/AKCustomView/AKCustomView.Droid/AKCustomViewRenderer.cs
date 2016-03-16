@@ -83,19 +83,26 @@ namespace AK.Droid
 
         protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.View> e)
         {
-            if (this.Control == null) {
-                SetNativeControl(new AKCustomViewInternal(this, this.Context));
-            }
+            if (e.NewElement != null)
+            {
+                if (this.Control == null)
+                {
+                    SetNativeControl(new AKCustomViewInternal(this, this.Context));
+                }
 
-            var control = (AKCustomViewInternal)this.Control;
-            var view = (AKCustomView)e.NewElement;
+                var control = this.Control as AKCustomViewInternal;
+                var view = e.NewElement as AKCustomView;
+                if (control != null && view != null)
+                {
+                    view._invalidate = control.Invalidate;
 
-            view._invalidate = control.Invalidate;
-
-            var pp = control.LayoutParameters;
-            if (pp != null) {
-                pp.Width = (int)e.NewElement.WidthRequest;
-                pp.Height = (int)e.NewElement.HeightRequest;
+                    var pp = control.LayoutParameters;
+                    if (pp != null)
+                    {
+                        pp.Width = (int)e.NewElement.WidthRequest;
+                        pp.Height = (int)e.NewElement.HeightRequest;
+                    }
+                }
             }
             base.OnElementChanged(e);
         }
