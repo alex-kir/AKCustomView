@@ -32,7 +32,7 @@
   <ItemGroup>
     <Compile Include="AKCustomView.Demo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="C:\Users\xxx\github.com\AKCutomView\trunk\src\AKCustomView.Demo\AKCustomView.Demo\RoundBoxView.cs" />
+    <Compile Include="RoundBoxView.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.1.3.5.6335\build\portable-win+net45+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.1.3.5.6335\build\portable-win+net45+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
@@ -43,11 +43,14 @@
     <Reference Include="Xamarin.Forms.Xaml">
       <HintPath>..\packages\Xamarin.Forms.1.3.5.6335\lib\portable-win+net45+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Xaml.dll</HintPath>
     </Reference>
-    <Reference Include="AKCustomView">
-      <HintPath>C:\Users\xxx\github.com\AKCutomView\trunk\bin\AKCustomView.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\AKCustomView\AKCustomView\AKCustomView.csproj">
+      <Project>{27B259B0-6CCA-4DF8-A260-C252F81DD4E9}</Project>
+      <Name>AKCustomView</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

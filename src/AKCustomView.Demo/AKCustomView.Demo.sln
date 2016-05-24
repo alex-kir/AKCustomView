@@ -5,19 +5,37 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AKCustomView.Demo", "AKCust
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AKCustomView.Demo.Droid", "Droid\AKCustomView.Demo.Droid.csproj", "{E198008A-B5D9-4EC8-BA6B-586DF85FB04B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Control", "Control", "{9309150C-AA48-4EAC-8509-0B581D33207B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AKCustomView", "..\AKCustomView\AKCustomView\AKCustomView.csproj", "{27B259B0-6CCA-4DF8-A260-C252F81DD4E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AKCustomView.Droid", "..\AKCustomView\AKCustomView.Droid\AKCustomView.Droid.csproj", "{DB6CCC4D-F071-45A3-BB07-4C4131C0C06E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{27B259B0-6CCA-4DF8-A260-C252F81DD4E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27B259B0-6CCA-4DF8-A260-C252F81DD4E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27B259B0-6CCA-4DF8-A260-C252F81DD4E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27B259B0-6CCA-4DF8-A260-C252F81DD4E9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2E1C534F-DE97-4FC7-BD25-27B79BC508F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2E1C534F-DE97-4FC7-BD25-27B79BC508F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E1C534F-DE97-4FC7-BD25-27B79BC508F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E1C534F-DE97-4FC7-BD25-27B79BC508F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB6CCC4D-F071-45A3-BB07-4C4131C0C06E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB6CCC4D-F071-45A3-BB07-4C4131C0C06E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB6CCC4D-F071-45A3-BB07-4C4131C0C06E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB6CCC4D-F071-45A3-BB07-4C4131C0C06E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E198008A-B5D9-4EC8-BA6B-586DF85FB04B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E198008A-B5D9-4EC8-BA6B-586DF85FB04B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E198008A-B5D9-4EC8-BA6B-586DF85FB04B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E198008A-B5D9-4EC8-BA6B-586DF85FB04B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{27B259B0-6CCA-4DF8-A260-C252F81DD4E9} = {9309150C-AA48-4EAC-8509-0B581D33207B}
+		{DB6CCC4D-F071-45A3-BB07-4C4131C0C06E} = {9309150C-AA48-4EAC-8509-0B581D33207B}
 	EndGlobalSection
 EndGlobal

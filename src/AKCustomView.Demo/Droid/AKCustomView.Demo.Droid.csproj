@@ -57,14 +57,15 @@
     <Reference Include="Xamarin.Forms.Xaml">
       <HintPath>..\packages\Xamarin.Forms.1.3.5.6335\lib\MonoAndroid10\Xamarin.Forms.Xaml.dll</HintPath>
     </Reference>
-    <Reference Include="AKCustomView.Droid">
-      <HintPath>C:\Users\xxx\github.com\AKCutomView\trunk\bin\AKCustomView.Droid.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AKCustomView.Demo\AKCustomView.Demo.csproj">
       <Project>{2E1C534F-DE97-4FC7-BD25-27B79BC508F5}</Project>
       <Name>AKCustomView.Demo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\AKCustomView\AKCustomView.Droid\AKCustomView.Droid.csproj">
+      <Project>{DB6CCC4D-F071-45A3-BB07-4C4131C0C06E}</Project>
+      <Name>AKCustomView.Droid</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
