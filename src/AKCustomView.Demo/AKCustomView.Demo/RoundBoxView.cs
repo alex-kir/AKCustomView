@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace AKCustomView.Demo
 {
-    public class RoundBoxView : AK.AKCustomView
+    public class RoundBoxView : AK.CustomView
     {
         private static float ellipseConstant = (float)(1 - (Math.Sqrt(2) - 1) * 4 / 3);
 

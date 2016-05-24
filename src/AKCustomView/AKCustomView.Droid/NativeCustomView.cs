@@ -26,7 +26,7 @@ namespace AK.Droid
 
         protected override void OnDraw(Android.Graphics.Canvas canvas)
         {
-            base.OnDraw(canvas);
+            base.OnDraw(canvas);// can I remove this line?
             var g = new AK.Droid.Graphics(canvas, this.Context);
             owner.Element.OnDraw(g);
         }
