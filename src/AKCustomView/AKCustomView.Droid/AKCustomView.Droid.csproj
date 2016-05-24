@@ -61,8 +61,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Resources\Resource.designer.cs" />
-    <Compile Include="AKCustomViewRenderer.cs" />
     <Compile Include="Graphics.cs" />
+    <Compile Include="NativeCustomView.cs" />
+    <Compile Include="CustomViewRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

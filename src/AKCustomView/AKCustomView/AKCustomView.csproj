@@ -31,7 +31,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="AKCustomView.cs" />
     <Compile Include="Graphics.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="Types.cs" />
@@ -39,6 +38,7 @@
     <Compile Include="GestureRecognizer.cs" />
     <Compile Include="Extentions.cs" />
     <Compile Include="SingleTapGestureRecognizer.cs" />
+    <Compile Include="CustomView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.Forms.Core, Version=1.4.0.0, Culture=neutral, PublicKeyToken=null">
