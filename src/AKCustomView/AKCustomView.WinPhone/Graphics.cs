@@ -1,7 +1,17 @@
 ﻿using System;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Shapes;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
+
+using UIColor = Windows.UI.Color;
+using UIBrush = Windows.UI.Xaml.Media.Brush;
+using UISolidColorBrush = Windows.UI.Xaml.Media.SolidColorBrush;
+
+using UIPoint = Windows.Foundation.Point;
+
+using UILine = Windows.UI.Xaml.Shapes.Line;
+using UIRectangle = Windows.UI.Xaml.Shapes.Rectangle;
+using UIPath = Windows.UI.Xaml.Shapes.Path;
+
 
 namespace AK.WinPhone
 {
@@ -36,7 +46,7 @@ namespace AK.WinPhone
 
         public override void FillRectangle(Brush brush, float x, float y, float width, float height)
         {
-            var rect = new System.Windows.Shapes.Rectangle();
+            var rect = new UIRectangle();
             rect.Stroke = ToSolidColorBrush(((SolidBrush)brush).Color);
             rect.Fill = ToSolidColorBrush(((SolidBrush)brush).Color);
             rect.Width = width;
@@ -44,90 +54,83 @@ namespace AK.WinPhone
             Canvas.SetLeft(rect, x);
             Canvas.SetTop(rect, y);
             canvas.Children.Add(rect);
-
-
-
-            //canvas.Children.Add(new System.Windows.Shapes.Rectangle() { X1 = x1, Y1 = y1, X2 = x2, Y2 = y2, Stroke = ToSolidColorBrush(pen.Color) });
-            //UpdateIOSContext(null, brush, null);
-            //context.FillRect(new CoreGraphics.CGRect((nfloat)x, (nfloat)y, (nfloat)width, (nfloat)height));
         }
 
         public override void DrawLine(AK.Pen pen, float x1, float y1, float x2, float y2)
         {
-            canvas.Children.Add(new Line() { X1 = x1, Y1 = y1, X2 = x2, Y2 = y2, Stroke = ToSolidColorBrush(pen.Color) });
-            //UpdateIOSContext(null, null, pen);
-            //context.AddLines(new CGPoint[] {
-            //            new CGPoint(x1, y1),
-            //            new CGPoint(x2, y2),
-            //        });
-            //context.StrokePath();
+            canvas.Children.Add(new UILine() { X1 = x1, Y1 = y1, X2 = x2, Y2 = y2, Stroke = ToSolidColorBrush(pen.Color) });
         }
 
-////        public void DrawImage(Image image, RectangleF destRect, RectangleF srcRect, GraphicsUnit srcUnit)
-////        {
-////            var cgRect = new CGRect(destRect.X, -destRect.Y - destRect.Height, destRect.Width, destRect.Height);
-////            context.ScaleCTM((nfloat)1.0, (nfloat)(-1.0));
-////            context.DrawImage(cgRect, image.NativeImage.CGImage);
-////            context.ScaleCTM((nfloat)1.0, (nfloat)(-1.0));
-////            //            image.NativeImage.Draw(ToCGRect(destRect));
-////
-////        }
-
-//        public SizeF MeasureString(String text, Font font)
-//        {
-//            CGSize ret;
-//            var str = new NSString (text);
-//            if (UIKit.UIDevice.CurrentDevice.CheckSystemVersion (7, 0)) { 
-//                var attributes = new UIStringAttributes { Font = UIKit.UIFont.SystemFontOfSize (font.Size) };
-//                ret = str.GetSizeUsingAttributes (attributes);
-//            } else {
-//                ret = str.StringSize (UIFont.SystemFontOfSize (font.Size));
-//            }
-//            return new SizeF((float)ret.Width, (float)ret.Height);
-//        }
-
-//        CGRect ToCGRect(RectangleF rect)
-//        {
-//            return new CGRect(rect.X, rect.Y, rect.Width, rect.Height);
-//        }
-
-        System.Windows.Media.SolidColorBrush ToSolidColorBrush(Color color)
+        private static UIPath GetUIPath(GraphicsPath path)
         {
-            return new SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B));
+            var uipath = new UIPath();
+
+            var geometry = new PathGeometry();
+            var figure = new PathFigure();
+            bool first = true;
+            foreach (var obj in path._segments)
+            {
+                var line = obj as GraphicsPath._LineSegment;
+                if (line != null)
+                {
+                    if (first)
+                    {
+                        first = false;
+                        figure.StartPoint = new UIPoint(line.x1, line.y1);
+                    }
+
+                    figure.Segments.Add(new LineSegment() { Point = new UIPoint(line.x1, line.y1) });
+                    figure.Segments.Add(new LineSegment() { Point = new UIPoint(line.x2, line.y2) });
+                    continue;
+                }
+
+                var bezier = obj as GraphicsPath._BezierSegment;
+                if (bezier != null)
+                {
+                    if (first)
+                    {
+                        first = false;
+                        figure.StartPoint = new UIPoint(bezier.x1, bezier.y1);
+                    }
+
+                    figure.Segments.Add(new LineSegment() { Point = new UIPoint(bezier.x1, bezier.y1) });
+                    figure.Segments.Add(new BezierSegment()
+                    {
+                        Point1 = new UIPoint(bezier.x2, bezier.y2),
+                        Point2 = new UIPoint(bezier.x3, bezier.y3),
+                        Point3 = new UIPoint(bezier.x4, bezier.y4),
+                    });
+                    continue;
+                }
+            }
+            figure.IsClosed = path._closed;
+            geometry.Figures.Add(figure);
+            uipath.Data = geometry;
+
+            return uipath;
         }
 
-//        void UpdateIOSContext(Font font, Brush brush, Pen pen)
-//        {
-//            if (font != null) {
-//                context.SetFontSize(font.Size);
-//                //                paint.TextSize = font.Size;
-//                //                paint.SetTypeface(Typeface.Default);//TODO
-//            }
+        public override void DrawPath(Pen pen, GraphicsPath path)
+        {
+            var uipath = GetUIPath(path);
+            uipath.StrokeThickness = pen.Width;
+            uipath.Stroke = ToSolidColorBrush(pen.Color);
+            canvas.Children.Add(uipath);
+        }
 
-//            if (brush != null) {
-//                context.SetFillColor(ToCGColor(((SolidBrush)brush).Color));
-//                context.SetFillColor(ToCGColor(((SolidBrush)brush).Color));
-//                //                CGContextSetRGBStrokeColor(context, 1.0, 0.0, 0.0, 1.0);
-//                //                CGContextSelectFont(context, "Helvetica", 20, kCGEncodingMacRoman);
+        public override void FillPath(Brush brush, GraphicsPath path)
+        {
+            var uipath = GetUIPath(path);
+            uipath.Stroke = ToSolidColorBrush(((SolidBrush)brush).Color);
+            uipath.Fill = ToSolidColorBrush(((SolidBrush)brush).Color);
+            canvas.Children.Add(uipath);
+        }
 
-//                //                paint.Color = ToAndroidColor(((SolidBrush)brush).Color);
-//                //                paint.SetStyle(Android.Graphics.Paint.Style.Fill);
-//            }
+        UIBrush ToSolidColorBrush(Color color)
+        {
+            return new UISolidColorBrush(UIColor.FromArgb(color.A, color.R, color.G, color.B));
+        }
 
-//            if (pen != null) {
-//                context.SetStrokeColor (ToCGColor(pen.Color));
-//                context.SetLineWidth(pen.Width);
-//                //                paint.Color = ToAndroidColor(pen.Color);
-//                //                paint.StrokeWidth = pen.Width;
-//                //                paint.SetStyle(Android.Graphics.Paint.Style.Stroke);
-//            }
-
-//            //            paint.TextAlign = Android.Graphics.Paint.Align.Left;
-//            //            paint.Flags = (Android.Graphics.PaintFlags)0;
-//            //            paint.AntiAlias = true;
-//            //            paint.FilterBitmap = true;
-//            //            paint.Dither = true;
-//        }
     }
 }
 

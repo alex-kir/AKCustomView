@@ -7,10 +7,6 @@ using Xamarin.Forms;
 
 namespace AK
 {
-    public class AKCustomView : CustomView
-    {
-    }
-
     public class CustomView : View
     {
         public static readonly BindableProperty UserInteractionEnabledProperty = BindableProperty.Create("UserInteractionEnabled", typeof(bool), typeof(CustomView), false);
