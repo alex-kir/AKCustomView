@@ -10,7 +10,7 @@ namespace AK
     {
         private static float ellipseConstant = (float)(1 - (Math.Sqrt(2) - 1) * 4 / 3);
 
-        internal static AK.Color GetAKColor(this Xamarin.Forms.Color color)
+        public static AK.Color GetAKColor(this Xamarin.Forms.Color color)
         {
             return Color.FromArgb((int)(255 * color.A), (int)(255 * color.R), (int)(255 * color.G), (int)(255 * color.B));
         }
@@ -23,7 +23,7 @@ namespace AK
             float borderWidth = pen == null ? 0 : pen.Width;
             float bw2 = borderWidth / 2;
             var path = GetPath(x + bw2, y + bw2, w - borderWidth, h - borderWidth,
-                lt - bw2, rt - bw2, rb - bw2, lb - bw2);
+                lt, rt, rb, lb);
             if (brush != null)
                 g.FillPath(brush, path);
             if (pen != null)

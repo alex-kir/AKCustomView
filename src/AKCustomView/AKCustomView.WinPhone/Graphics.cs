@@ -121,7 +121,7 @@ namespace AK.WinPhone
         public override void FillPath(Brush brush, GraphicsPath path)
         {
             var uipath = GetUIPath(path);
-            uipath.Stroke = ToSolidColorBrush(((SolidBrush)brush).Color);
+            uipath.StrokeThickness = 0;
             uipath.Fill = ToSolidColorBrush(((SolidBrush)brush).Color);
             canvas.Children.Add(uipath);
         }
