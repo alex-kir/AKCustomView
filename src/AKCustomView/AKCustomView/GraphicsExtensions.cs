@@ -15,6 +15,32 @@ namespace AK
             return Color.FromArgb((int)(255 * color.A), (int)(255 * color.R), (int)(255 * color.G), (int)(255 * color.B));
         }
 
+        public static AK.Color ToAKColor(this Xamarin.Forms.Color color)
+        {
+            return Color.FromArgb((int)(255 * color.A), (int)(255 * color.R), (int)(255 * color.G), (int)(255 * color.B));
+        }
+
+        public static AK.FontStyle ToAKFontStyle(this Xamarin.Forms.FontAttributes self)
+        {
+            var ret = FontStyle.Regular;
+
+            if (self.HasFlag(Xamarin.Forms.FontAttributes.Bold))
+                ret = ret | FontStyle.Bold;
+
+            if (self == Xamarin.Forms.FontAttributes.Italic)
+                ret = ret | FontStyle.Italic;
+
+            return ret;
+        }
+
+        public static void DrawRoundedRectangle(this Graphics g,
+            float x, float y, float w, float h,
+            float lt, float rt, float rb, float lb,
+            Pen pen, Brush brush)
+        {
+            g.RoundedRect(x, y, w, h, lt, rt, rb, lb, pen, brush);
+        }
+
         public static void RoundedRect(this Graphics g,
             float x, float y, float w, float h,
             float lt, float rt, float rb, float lb,
@@ -86,6 +112,23 @@ namespace AK
             path.CloseFigure();
 
             return path;
+        }
+
+
+        public static void DrawStringInRectangle(this Graphics g, string text, Font font, Brush brush, float x, float y, float width, float height)
+        {
+            if (string.IsNullOrEmpty(text))
+                return;
+
+            var sz = g.MeasureString(text, font);
+            if (sz.Width > width || sz.Height > height)
+            {
+                float factor = Math.Min(width / sz.Width, height / sz.Height);
+                font = new Font(font.Name, font.Size * factor, font.Style);
+                sz = new SizeF(sz.Width * factor, sz.Height * factor);
+            }
+
+            g.DrawString(text, font, brush, x + width / 2 - sz.Width / 2, y + height / 2 - sz.Height / 2);
         }
     }
 }

@@ -129,17 +129,6 @@ namespace AK
         //World,
     }
 
-    public class Font
-    {
-        public string OriginalFontName { get; private set; }
-        public float Size { get; private set; }
-        public Font(string familyName, float emSize)
-        {
-            OriginalFontName = familyName;
-            Size = emSize;
-        }
-    }
-
     public struct Color
     {
         private byte a;

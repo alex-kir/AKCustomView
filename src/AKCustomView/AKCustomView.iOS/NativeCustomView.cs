@@ -24,24 +24,28 @@ namespace AK.iOS
             owner.Element.OnDraw(g);
         }
 
+        [Foundation.Preserve]
         public override void TouchesBegan(Foundation.NSSet touches, UIEvent evt)
         {
             ProcessTouches(evt);
             base.TouchesBegan(touches, evt);
         }
 
+        [Foundation.Preserve]
         public override void TouchesMoved(Foundation.NSSet touches, UIEvent evt)
         {
             ProcessTouches(evt);
             base.TouchesMoved(touches, evt);
         }
 
+        [Foundation.Preserve]
         public override void TouchesEnded(Foundation.NSSet touches, UIEvent evt)
         {
             ProcessTouches(evt);
             base.TouchesEnded(touches, evt);
         }
 
+        [Foundation.Preserve]
         public override void TouchesCancelled(Foundation.NSSet touches, UIEvent evt)
         {
             ProcessTouches(evt);
@@ -51,13 +55,14 @@ namespace AK.iOS
         bool ProcessTouches(UIEvent evt)
         {
             var view = (AK.CustomView)owner.Element;
-            if (!view.UserInteractionEnabled)
+            if (view.InputTransparent)
                 return false;
 
             var tt = evt.AllTouches.Cast<UITouch>().Select(it => new AK.Touch{
                 Id = it.GetHashCode(), // TODO
                 IsDown = it.Phase == UITouchPhase.Began,
-                IsUp = it.Phase == UITouchPhase.Ended || it.Phase == UITouchPhase.Cancelled,
+                IsUp = it.Phase == UITouchPhase.Ended,
+                IsCancelled = it.Phase == UITouchPhase.Cancelled,
                 X = (float)it.LocationInView(this).X,
                 Y = (float)it.LocationInView(this).Y,
                 PrevX = (float)it.PreviousLocationInView(this).X,

@@ -17,22 +17,24 @@ namespace AK.WinPhone
         protected override void OnElementChanged(ElementChangedEventArgs<CustomView> e)
         {
             base.OnElementChanged(e);
-            if (this.Control == null) {
+            if (this.Control == null && this.Tracker != null)
+            {
                 SetNativeControl(new NativeCustomView(this));
             }
 
-            //Debug.WriteLine("W:" + view.Width + ", H:" + view.Height);
-            e.NewElement._invalidate = Control.OnRebuild;
-            //e.NewElement.Invalidate();
+            if (e.NewElement != null)
+                e.NewElement._invalidateCallback = () => Control?.OnRebuild();
 
             base.OnElementChanged(e);
         }
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Width" || e.PropertyName == "Height")
+            if (e.PropertyName == VisualElement.WidthProperty.PropertyName || e.PropertyName == VisualElement.HeightProperty.PropertyName)
                 if (Element.Width > 0 && Element.Height > 0)
                     Element.Invalidate();
+            if (e.PropertyName == "InputTransparent")
+                Control.SetInputTransparent(Element.InputTransparent);
             base.OnElementPropertyChanged(sender, e);
         }
     }

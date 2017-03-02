@@ -18,6 +18,12 @@ namespace AK
 
         public bool IsDown { get; set; }
         public bool IsUp { get; set; }
+        public bool IsCancelled { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("[Touch: {0:0}, {1:0}; {2} {3}]", X, Y, (IsDown ? "D" : "") + (IsUp ? "U" : "") + (IsCancelled ? "C" : ""), Id);
+        }
     }
 }
 

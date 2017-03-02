@@ -20,10 +20,26 @@ namespace AK.Droid
         public override void DrawString(string s, Font font, Brush brush, float x, float y)
         {
             UpdateAndroidPaint(font, brush, null);
-            var tmp = MeasureString(s, font);
-            var tmp2 = paint.GetFontMetrics().Bottom;
-            canvas.DrawText(s, x * density, (y + tmp.Height) * density - tmp2, paint);
+            var text = s ?? "";
+            var tmp = MeasureString(text, font);
+            var tmp2 = paint.GetFontMetrics().Bottom / density;
+            canvas.DrawText(text, x * density, (y + tmp.Height) * density - tmp2, paint);
         }
+
+        public override SizeF MeasureString(String text, Font font)
+        {
+            UpdateAndroidPaint(font, null, null);
+            var s = text ?? "";
+            return new SizeF(paint.MeasureText(s, 0, s.Length) / density, font.Size);
+        }
+
+        //public void DrawImage(Image image, RectangleF destRect, RectangleF srcRect, GraphicsUnit srcUnit)
+        //{
+        //    UpdateAndroidPaint(null, null, null);
+        //    var src = new Rect((int)srcRect.Left, (int)srcRect.Top, (int)srcRect.Right, (int)srcRect.Bottom);
+        //    var dst = new Rect((int)(destRect.Left * density), (int)(destRect.Top * density), (int)(destRect.Right * density), (int)(destRect.Bottom * density));
+        //    canvas.DrawBitmap(image.AndroidBitmap, src, dst, paint);
+        //}
 
         public override void FillRectangle(Brush brush, float x, float y, float width, float height )
         {
@@ -87,25 +103,14 @@ namespace AK.Droid
             canvas.DrawPath(path, paint);
         }
 
-//        public void DrawImage(Image image, RectangleF destRect, RectangleF srcRect, GraphicsUnit srcUnit)
-//        {
-//            UpdateAndroidPaint(null, null, null);
-//            var src = new Rect((int)srcRect.Left, (int)srcRect.Top, (int)srcRect.Right, (int)srcRect.Bottom);
-//            var dst = new Rect((int)(destRect.Left * density), (int)(destRect.Top * density), (int)(destRect.Right * density), (int)(destRect.Bottom * density));
-//            canvas.DrawBitmap(image.AndroidBitmap, src, dst, paint);
-//        }
-
-        public SizeF MeasureString(String text, Font font)
-        {
-            UpdateAndroidPaint(font, null, null);
-            return new SizeF(paint.MeasureText(text, 0, text.Length) / density, font.Size);
-        }
-
         void UpdateAndroidPaint(Font font, Brush brush, Pen pen)
         {
             if (font != null) {
-                paint.TextSize = font.Size;
-                paint.SetTypeface(Typeface.Default);//TODO
+                paint.TextSize = font.Size * density;
+                if (font.Bold)
+                    paint.SetTypeface(Typeface.DefaultBold);
+                else
+                    paint.SetTypeface(Typeface.Default);
             }
 
             if (brush != null) {

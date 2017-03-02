@@ -7,6 +7,7 @@ using UIBrush = Windows.UI.Xaml.Media.Brush;
 using UISolidColorBrush = Windows.UI.Xaml.Media.SolidColorBrush;
 
 using UIPoint = Windows.Foundation.Point;
+using UISize = Windows.Foundation.Size;
 
 using UILine = Windows.UI.Xaml.Shapes.Line;
 using UIRectangle = Windows.UI.Xaml.Shapes.Rectangle;
@@ -17,31 +18,42 @@ namespace AK.WinPhone
 {
     public class Graphics : AK.Graphics
     {
-        Canvas canvas;
+        readonly Canvas canvas;
+        //readonly float density;
+        readonly TextBlock forMeasureString = new TextBlock();
 
         public Graphics(Canvas canvas)
         {
             this.canvas = canvas;
             canvas.Children.Clear();
+            //density = Windows.Graphics.Display.DisplayInformation.GetForCurrentView().LogicalDpi / 96;
         }
 
         public override void DrawString(string s, Font font, Brush brush, float x, float y)
         {
-
             TextBlock textBlock = new TextBlock();
 
-            textBlock.Text = s;
-
+            textBlock.Text = s ?? "";
+            textBlock.FontSize = font.Size;// * density;
             textBlock.Foreground = ToSolidColorBrush(((SolidBrush)brush).Color);
+            if (font.Bold)
+                textBlock.FontWeight = Windows.UI.Text.FontWeights.Bold;
+
+
 
             Canvas.SetLeft(textBlock, x);
-
             Canvas.SetTop(textBlock, y);
 
             canvas.Children.Add(textBlock);
+        }
 
-            //UpdateIOSContext(font, brush, null);
-            //new NSString(s).DrawString(new CGPoint(x, y), UIKit.UIFont.SystemFontOfSize(font.Size));
+        public override SizeF MeasureString(string text, Font font)
+        {
+            forMeasureString.Text = text ?? "";
+            forMeasureString.FontSize = font.Size;// / density;
+            forMeasureString.Measure(new UISize(double.PositiveInfinity, double.PositiveInfinity));
+
+            return forMeasureString.DesiredSize.ToAKSize();
         }
 
         public override void FillRectangle(Brush brush, float x, float y, float width, float height)
@@ -130,7 +142,6 @@ namespace AK.WinPhone
         {
             return new UISolidColorBrush(UIColor.FromArgb(color.A, color.R, color.G, color.B));
         }
-
     }
 }
 

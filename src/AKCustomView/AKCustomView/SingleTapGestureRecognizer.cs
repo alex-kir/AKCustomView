@@ -13,8 +13,16 @@ namespace AK
                 yield return false;
 
                 while (touches.Length == 1) {
-                    if (touches[0].IsUp) {
-                        yield return (DateTime.Now - time).TotalSeconds < 0.3 && touches[0].XY.Distance(pos) < 10;
+                    if (touches[0].IsCancelled)
+                    {
+                        yield return false;
+                        yield break;
+                    }
+                    else if (touches[0].IsUp) {
+                        var t = (DateTime.Now - time).TotalSeconds;
+                        t = 0;
+                        var yes = t < 0.5 && touches[0].XY.Distance(pos) < 10;
+                        yield return yes;
                         yield break;
                     }
                     else {

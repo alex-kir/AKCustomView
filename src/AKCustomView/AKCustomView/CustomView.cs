@@ -9,21 +9,7 @@ namespace AK
 {
     public class CustomView : View
     {
-        public static readonly BindableProperty UserInteractionEnabledProperty = BindableProperty.Create("UserInteractionEnabled", typeof(bool), typeof(CustomView), false);
-
-        public bool UserInteractionEnabled
-        {
-            get
-            {
-                return (bool)base.GetValue(UserInteractionEnabledProperty);
-            }
-            set
-            {
-                base.SetValue(UserInteractionEnabledProperty, value);
-            }
-        }
-
-        public Action _invalidate;
+        public Action _invalidateCallback;
 
         public virtual void OnDraw(Graphics g)
         {
@@ -37,8 +23,8 @@ namespace AK
 
         public void Invalidate()
         {
-            if (_invalidate != null)
-                _invalidate();
+            if (_invalidateCallback != null)
+                _invalidateCallback();
         }
     }
 

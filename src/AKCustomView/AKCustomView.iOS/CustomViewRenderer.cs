@@ -21,7 +21,6 @@ namespace AK.iOS
         [Foundation.Preserve]
         protected override void OnElementChanged(ElementChangedEventArgs<AK.CustomView> e)
         {
-            Debug.WriteLine("OnElementChanged:" + e.NewElement + ", " + this.Control);
             if (e.NewElement != null)
             {
                 if (this.Control == null)
@@ -31,10 +30,23 @@ namespace AK.iOS
 
                 if (this.Control != null && e.NewElement != null)
                 {
-                    e.NewElement._invalidate = this.Control.SetNeedsDisplay;
+                    e.NewElement._invalidateCallback = this.Control.SetNeedsDisplay;
                 }
             }
             base.OnElementChanged(e);
+        }
+
+        protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == VisualElement.WidthProperty.PropertyName ||
+                e.PropertyName == VisualElement.HeightProperty.PropertyName ||
+                e.PropertyName == VisualElement.IsVisibleProperty.PropertyName
+               )
+            {
+                if (Element.IsVisible && Control != null)
+                    Control.SetNeedsDisplay();
+            }
+            base.OnElementPropertyChanged(sender, e);
         }
     }
 }

@@ -4,22 +4,44 @@ using AK;
 using UIKit;
 using CoreGraphics;
 using ObjCRuntime;
+using System.Diagnostics;
 
 namespace AK.iOS
 {
     public class Graphics : AK.Graphics
     {
         CoreGraphics.CGContext context;
+        CGColorSpace colorspace;
 
         public Graphics(CoreGraphics.CGContext context, float width, float height)
         {
             this.context = context;
+            this.colorspace = CGColorSpace.CreateDeviceRGB();
         }
 
         public override void DrawString(string s, Font font, Brush brush, float x, float y)
         {
             UpdateIOSContext(font, brush, null);
-            new NSString(s).DrawString(new CGPoint(x, y), UIKit.UIFont.SystemFontOfSize(font.Size));
+            //var weight = font.Bold ? UIFontWeight.Bold : UIFontWeight.Regular;
+            var f = font.Bold ? UIFont.BoldSystemFontOfSize(font.Size) : UIFont.SystemFontOfSize(font.Size);
+            new NSString(s ?? "").DrawString(new CGPoint(x, y), f);
+        }
+
+        public override SizeF MeasureString(String text, Font font)
+        {
+            CGSize ret;
+
+            var str = new NSString(text ?? "");
+            var f = font.Bold ? UIFont.BoldSystemFontOfSize(font.Size) : UIFont.SystemFontOfSize(font.Size);
+            if (UIKit.UIDevice.CurrentDevice.CheckSystemVersion(7, 0))
+            {
+                var attributes = new UIStringAttributes { Font = f };
+                ret = str.GetSizeUsingAttributes(attributes);
+            }
+            else {
+                ret = str.StringSize(f);
+            }
+            return new SizeF((float)ret.Width, (float)ret.Height);
         }
 
         public override void FillRectangle(Brush brush, float x, float y, float width, float height )
@@ -101,19 +123,6 @@ namespace AK.iOS
 //
 //        }
 
-        public SizeF MeasureString(String text, Font font)
-        {
-            CGSize ret;
-            var str = new NSString (text);
-            if (UIKit.UIDevice.CurrentDevice.CheckSystemVersion (7, 0)) { 
-                var attributes = new UIStringAttributes { Font = UIKit.UIFont.SystemFontOfSize (font.Size) };
-                ret = str.GetSizeUsingAttributes (attributes);
-            } else {
-                ret = str.StringSize (UIFont.SystemFontOfSize (font.Size));
-            }
-            return new SizeF((float)ret.Width, (float)ret.Height);
-        }
-
         CGRect ToCGRect(RectangleF rect)
         {
             return new CGRect(rect.X, rect.Y, rect.Width, rect.Height);
@@ -121,7 +130,7 @@ namespace AK.iOS
 
         CGColor ToCGColor(Color color)
         {
-            return new CoreGraphics.CGColor(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
+            return new CoreGraphics.CGColor(colorspace, new nfloat[] { color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f });
         }
 
         void UpdateIOSContext(Font font, Brush brush, Pen pen)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Android.Content;
 using Android.Views;
 using System.Linq;
@@ -10,38 +10,63 @@ namespace AK.Droid
     public class NativeCustomView : View
     {
         PointF[] prevPointers = null;
-        readonly CustomViewRenderer owner;
+        //readonly CustomViewRenderer owner;
+
+        private readonly Action<Graphics> onDraw;
+        private readonly Func<bool> isInputTransparent;
+        private readonly Action<Touch[]> onTouches;
 
         public NativeCustomView(CustomViewRenderer owner, Context context)
             : base(context)
         {
-            this.owner = owner;
+            //this.owner = owner;
+            onDraw = g => owner.Element.OnDraw(g);
+            isInputTransparent = () => owner.Element.InputTransparent;
+            onTouches = tt => owner.Element.OnTouch(tt);
+        }
+
+        public NativeCustomView(Action<Graphics> onDraw, Func<bool> isInputTransparent, Action<Touch[]> onTouches, Context context) : base(context)
+        {
+            this.onDraw = onDraw;
+            this.isInputTransparent = isInputTransparent;
+            this.onTouches = onTouches;
+
             try
             {
                 this.SetLayerType(LayerType.Hardware, null);
             }
-            catch {
+            catch
+            {
             }
+        }
+
+
+        public void RedrawImage()
+        {
+            Invalidate();
         }
 
         protected override void OnDraw(Android.Graphics.Canvas canvas)
         {
             base.OnDraw(canvas);// can I remove this line?
             var g = new AK.Droid.Graphics(canvas, this.Context);
-            owner.Element.OnDraw(g);
+            onDraw(g);
+            //owner.Element.OnDraw(g);
         }
 
         public override bool OnTouchEvent(MotionEvent e)
         {
-            var view = owner.Element;
-            if (!view.UserInteractionEnabled)
+            //var view = owner.Element;
+            //if (view.InputTransparent)
+            if (isInputTransparent())
                 return false;
 
             try
             {
                 var density = Context.Resources.DisplayMetrics.Density;
                 var touches = new Touch[e.PointerCount];
-                for (int i = 0; i < touches.Length; i++) {
+                for (int i = 0; i < touches.Length; i++)
+                {
                     var t = new Touch();
                     t.Id = e.GetPointerId(i);
                     t.X = e.GetX(i) / density;
@@ -51,8 +76,10 @@ namespace AK.Droid
 
                 touches[e.ActionIndex].IsDown = e.ActionMasked == MotionEventActions.Down || e.ActionMasked == MotionEventActions.PointerDown;
                 touches[e.ActionIndex].IsUp = e.ActionMasked == MotionEventActions.Up || e.ActionMasked == MotionEventActions.PointerUp;
+                touches[e.ActionIndex].IsCancelled = e.ActionMasked == MotionEventActions.Cancel || e.Action == MotionEventActions.Cancel;
 
-                for (int i = 0; i < touches.Length; i++) {
+                for (int i = 0; i < touches.Length; i++)
+                {
                     var t = touches[i];
                     if (t.IsDown || prevPointers == null || prevPointers.Length == 0)
                     {
@@ -70,9 +97,11 @@ namespace AK.Droid
 
                 prevPointers = touches.Select(it => new PointF(it.X, it.Y)).ToArray();
 
-                view.OnTouch(touches);
+                //view.OnTouch(touches);
+                onTouches(touches);
             }
-            catch(Exception ex) {
+            catch (Exception ex)
+            {
                 Console.WriteLine(ex);
             }
             return true;
