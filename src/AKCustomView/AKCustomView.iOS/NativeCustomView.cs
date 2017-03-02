@@ -50,7 +50,7 @@ namespace AK.iOS
 
         bool ProcessTouches(UIEvent evt)
         {
-            var view = (AK.AKCustomView)owner.Element;
+            var view = (AK.CustomView)owner.Element;
             if (!view.UserInteractionEnabled)
                 return false;
 

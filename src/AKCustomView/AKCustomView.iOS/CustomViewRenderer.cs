@@ -7,7 +7,6 @@ using System.Linq;
 using System.Diagnostics;
 
 [assembly: ExportRenderer (typeof (AK.CustomView), typeof (AK.iOS.CustomViewRenderer))]
-[assembly: ExportRenderer (typeof (AK.AKCustomView), typeof (AK.iOS.CustomViewRenderer))]
 
 namespace AK.iOS
 {
