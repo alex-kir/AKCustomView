@@ -19,7 +19,7 @@ namespace AK.Droid
                 SetNativeControl(new NATIVE_VIEW(this, this.Context));
             }
 
-            e.NewElement._invalidateCallback = Control.RedrawImage;
+            e.NewElement._invalidateCallback = OnInvalidateCallback;
 
             var pp = Control.LayoutParameters;
             if (pp != null) {
@@ -28,6 +28,20 @@ namespace AK.Droid
             }
 
             base.OnElementChanged(e);
+        }
+
+        private void OnInvalidateCallback()
+        {
+            try
+            {
+                if (this.Control == null)
+                    return;
+                this.Control.RedrawImage();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
         protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

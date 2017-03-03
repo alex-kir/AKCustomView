@@ -35,15 +35,22 @@ namespace AK.Droid
             {
                 this.SetLayerType(LayerType.Hardware, null);
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex);
             }
         }
 
-
         public void RedrawImage()
         {
-            Invalidate();
+            try
+            {
+                Invalidate();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
         protected override void OnDraw(Android.Graphics.Canvas canvas)

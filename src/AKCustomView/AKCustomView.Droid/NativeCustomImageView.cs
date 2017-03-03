@@ -23,7 +23,9 @@ namespace AK.Droid
                 this.SetScaleType(ScaleType.FitCenter);
                 this.SetLayerType(LayerType.Hardware, null);
             }
-            catch {
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
         }
 
