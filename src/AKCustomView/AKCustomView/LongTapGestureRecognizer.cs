@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AK
 {
-    public class SingleTapGestureRecognizer : GestureRecognizer
+    public class LongTapGestureRecognizer : GestureRecognizer
     {
         protected override IEnumerable<bool> NextYield()
         {
@@ -19,13 +19,23 @@ namespace AK
                         yield break;
                     }
                     else if (touches[0].IsUp) {
-                        var t = (DateTime.Now - time).TotalSeconds;
-                        var yes = t < 0.5 && touches[0].XY.Distance(pos) < 10;
-                        yield return yes;
+                        yield return false;
                         yield break;
                     }
                     else {
-                        yield return false;
+                        var t = (DateTime.Now - time).TotalSeconds;
+                        if (t < 0.7)
+                        {
+                            yield return false;
+                        }
+                        else
+                        {
+                            yield return true;
+
+                            while (touches[0].IsUp)
+                                yield return false;
+                            yield break;
+                        }
                     }
                 }
             }
